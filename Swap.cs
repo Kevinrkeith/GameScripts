@@ -1,25 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class Swap : Powerup
+public class Swap : PowerUp
 {
     public void Awake()
     {
-        
-    }
-    public override Powerup GetPowerup()
-    {
-        return this;
+        type = PowerUpTypes.SWAP;
     }
 
-    public override void usePowerUp(GameObject player)
+    public override void UsePowerUp(int playerUsed)
     {
-
-        GameObject[] otherPlayers = player.GetComponent<PlayerBody>().getOthers();
-        int random = Random.Range(0, 3);
-        Vector3 otherPosition = otherPlayers[random].transform.position;
-        otherPlayers[random].transform.position = transform.position;
-        transform.position = otherPosition;
+        int random = playerUsed;
+        while (true)
+        {
+            random = Random.Range(0, GameManager.gameManager.numberOfPlayers);
+            if (random != playerUsed && GameManager.gameManager.player[random].tag != "Ghost") break;
+        }
+        Vector3 temp = GameManager.gameManager.player[playerUsed].transform.position;
+        GameManager.gameManager.player[playerUsed].transform.position = GameManager.gameManager.player[random].transform.position;
+        GameManager.gameManager.player[random].transform.position = temp;
     }
 }
