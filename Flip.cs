@@ -4,29 +4,14 @@ using UnityEngine;
 
 public class Flip : PowerUp
 {
-    public void Awake()
+    public override void UsePowerUp(int playerUsed)
     {
-        type = PowerUpTypes.FLIP;
-    }
-
-    protected override PowerUp GetPowerUp()
-    {
-        return this;
-    }
-
-    protected override PowerUpTypes GetType()
-    {
-        return type;
-    }
-
-    public override void UsePowerUp()
-    {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < GameManager.gameManager.numberOfPlayers; i++)
         {
-            if (player.GetComponent<PlayerBody>().otherPlayers[i].GetComponent<PlayerBody>().flip)
+            if (i != playerUsed)
             {
-                player.GetComponent<PlayerBody>().otherPlayers[i].GetComponent<PlayerBody>().playerCamera.transform.Rotate(0, 0 * Time.deltaTime, 180);
-                player.GetComponent<PlayerBody>().otherPlayers[i].GetComponent<PlayerBody>().flip = true;
+                GameManager.gameManager.cameras[i].transform.Rotate(0, 0*Time.deltaTime,180);
+                GameManager.gameManager.playerBody[i].flip = true;
             }
         }
     }
